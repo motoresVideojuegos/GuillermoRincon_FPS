@@ -18,6 +18,8 @@ public class PlayerScript : MonoBehaviour
     Rigidbody playerRb;
 
     private void Awake() {
+        Cursor.visible = false;
+
         camera = Camera.main;
         playerRb = GetComponent<Rigidbody>();
     }
@@ -40,7 +42,11 @@ public class PlayerScript : MonoBehaviour
 
         Vector3 direction = transform.right * x + transform.forward * z;
 
+        direction.y = playerRb.velocity.y;
+
         playerRb.velocity = direction;
+        playerRb.velocity.Normalize();
+
     }
 
     private void CameraView(){

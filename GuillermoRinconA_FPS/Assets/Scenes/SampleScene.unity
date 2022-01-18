@@ -148,7 +148,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 120695245}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.36, z: 0.742}
+  m_LocalPosition: {x: 0.517, y: -0.36, z: 0.742}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 708310002}
@@ -174,7 +174,7 @@ MonoBehaviour:
   maxAmmo: 88
   currentAmmo: 66
   infiniteAmmo: 1
-  fireCad: 0.6
+  fireCad: 1
 --- !u!1 &582466686
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,7 +289,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &582466692
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -49,8 +49,8 @@ public class WeaponScript : MonoBehaviour
     }
 
     private void Fire(){
-        GameObject newBullet = Instantiate(bulletPrefab);
-        newBullet.GetComponent<Rigidbody>().velocity = Vector3.forward * 10;
+        GameObject newBullet = Instantiate(bulletPrefab, firePoint.transform.position, firePoint.transform.rotation);
+        newBullet.GetComponent<Rigidbody>().velocity = firePoint.forward * 30;
     }
 
     private void Reload(){
