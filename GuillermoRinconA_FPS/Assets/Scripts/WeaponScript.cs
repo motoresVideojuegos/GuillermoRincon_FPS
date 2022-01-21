@@ -4,20 +4,36 @@ using UnityEngine;
 
 public class WeaponScript : MonoBehaviour
 {
-    public GameObject bulletPrefab;
+    PoolObjectController bulletPool;
     public Transform firePoint;
+
+    public CanvasController canvas;
+
+    private bool isPlayer;
 
     public int maxAmmo;
     public int currentAmmo;
 
+    public float bulletVelocity;
     public bool infiniteAmmo;
     public float fireCad;
+    public float fireVelocity;
     private float shootReload = 0f;
 
     private void Start() {
        
        infiniteAmmo = false;
        
+    }
+    
+    private void Awake() {
+        bulletPool = GetComponent<PoolObjectController>();
+
+        isPlayer = false;
+        if(GetComponent<PlayerScript>()){
+            isPlayer = true;
+            canvas.setCurrentAmmo(currentAmmo);
+        }
     }
 
     // Update is called once per frame
@@ -31,6 +47,10 @@ public class WeaponScript : MonoBehaviour
                     Fire();
                     --currentAmmo;
                     shootReload = 0;
+
+                    if(isPlayer == true){
+                        canvas.setCurrentAmmo(currentAmmo);
+                    }
                 }else{
                     Reload();
                     Fire();
@@ -39,21 +59,29 @@ public class WeaponScript : MonoBehaviour
                 
             }
 
-            shootReload += 1 * Time.deltaTime;
+            shootReload += fireVelocity * Time.deltaTime;
             
         }
 
-        if(Input.GetKeyDown(KeyCode.R)){
-            Reload();
+        if(isPlayer == true){
+            if(Input.GetKeyDown(KeyCode.R)){
+                Reload();
+            }
         }
+
     }
 
     private void Fire(){
-        GameObject newBullet = Instantiate(bulletPrefab, firePoint.transform.position, firePoint.transform.rotation);
-        newBullet.GetComponent<Rigidbody>().velocity = firePoint.forward * 30;
+        GameObject newBullet = bulletPool.getObject();
+        newBullet.transform.position = firePoint.position;
+        newBullet.transform.rotation = firePoint.rotation;
+
+        newBullet.GetComponent<Rigidbody>().velocity = firePoint.forward * bulletVelocity;
+        
     }
 
     private void Reload(){
         currentAmmo = maxAmmo;
+        canvas.setCurrentAmmo(currentAmmo);
     }
 }

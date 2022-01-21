@@ -18,7 +18,7 @@ public class PlayerScript : MonoBehaviour
     Rigidbody playerRb;
 
     private void Awake() {
-        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
 
         camera = Camera.main;
         playerRb = GetComponent<Rigidbody>();
