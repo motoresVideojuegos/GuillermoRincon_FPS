@@ -11,8 +11,12 @@ public class WeaponScript : MonoBehaviour
 
     private bool isPlayer;
 
-    public int maxAmmo;
+    public int maxCurrentAmmo;
     public int currentAmmo;
+
+    public int maxBullets;
+
+    public int maxWeaponAmmo;
 
     public float bulletVelocity;
     public bool infiniteAmmo;
@@ -23,6 +27,9 @@ public class WeaponScript : MonoBehaviour
     private void Start() {
        
        infiniteAmmo = false;
+       if(GetComponentInParent<PlayerScript>()){
+           canvas.setMaxAmmo(maxCurrentAmmo);
+       }
        
     }
     
@@ -65,13 +72,16 @@ public class WeaponScript : MonoBehaviour
 
         if(isPlayer == true){
             if(Input.GetKeyDown(KeyCode.R)){
-                Reload();
+                if(currentAmmo != maxWeaponAmmo){
+                    Reload();
+                }
+                
             }
         }
 
     }
 
-    private void Fire(){
+    public void Fire(){
         GameObject newBullet = bulletPool.getObject();
         newBullet.transform.position = firePoint.position;
         newBullet.transform.rotation = firePoint.rotation;
@@ -80,8 +90,26 @@ public class WeaponScript : MonoBehaviour
         
     }
 
-    private void Reload(){
-        currentAmmo = maxAmmo;
+    public void Reload(){
+
+        int ammoDiff = maxWeaponAmmo - currentAmmo;
+
+        //Calcular si se necesitan más balas de las disponibles para la recarga
+        //Si no hay sificientes balas se suma las balas restantes a la municion actual
+        if(maxCurrentAmmo - ammoDiff < 0){
+            currentAmmo += maxCurrentAmmo;
+            maxCurrentAmmo = 0;
+        }else{
+            maxCurrentAmmo -= ammoDiff;
+            currentAmmo += ammoDiff;
+        }
+
         canvas.setCurrentAmmo(currentAmmo);
+        canvas.setMaxAmmo(maxCurrentAmmo);
+    }
+
+    public void addAmmo(int ammount){
+        maxCurrentAmmo = Mathf.Clamp(maxCurrentAmmo + ammount, 0, maxBullets);
+        canvas.setMaxAmmo(maxCurrentAmmo);
     }
 }

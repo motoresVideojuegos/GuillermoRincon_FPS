@@ -14,6 +14,8 @@ public class PlayerScript : MonoBehaviour
     public float minViewX;
     public float rotationX;
 
+    public int maxHealth;
+    public int currentHealth;
     Camera camera;
     Rigidbody playerRb;
 
@@ -22,6 +24,8 @@ public class PlayerScript : MonoBehaviour
 
         camera = Camera.main;
         playerRb = GetComponent<Rigidbody>();
+        currentHealth = maxHealth;
+
     }
 
     // Update is called once per frame
@@ -67,6 +71,17 @@ public class PlayerScript : MonoBehaviour
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
 
+    }
+
+    public void takeDmg(int dmgTaken){
+        currentHealth -= dmgTaken;
+        if(currentHealth <= 0){
+            Debug.Log("MUERTO");
+        }
+    }
+
+    public void addLife(int heal){
+        currentHealth = Mathf.Clamp(currentHealth + heal, 0, maxHealth);
     }
     
 }
