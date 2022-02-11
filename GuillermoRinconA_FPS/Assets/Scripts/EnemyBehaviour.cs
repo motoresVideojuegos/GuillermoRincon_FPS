@@ -7,6 +7,7 @@ public class EnemyBehaviour : MonoBehaviour
     UnityEngine.AI.NavMeshAgent nav;
     public Transform player;
     public WeaponScript weaponController;
+
     public int maxHealth;
     private int currentHealth;
     public int exp;
@@ -14,6 +15,7 @@ public class EnemyBehaviour : MonoBehaviour
     public float range;
     public float rangeShoot;
 
+    public int points;
     public float fireVelocity;
     public float fireCad;
     private float shootReload = 0f;
@@ -59,8 +61,9 @@ public class EnemyBehaviour : MonoBehaviour
 
     public void RemoveLife(int dmgTaken){
         currentHealth -= dmgTaken;
-
+        
         if(currentHealth <= 0){
+            player.GetComponent<PlayerScript>().addPoints(points);
             Destroy(gameObject);
         }
     }

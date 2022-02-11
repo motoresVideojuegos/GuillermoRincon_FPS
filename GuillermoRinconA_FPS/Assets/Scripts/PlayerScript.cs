@@ -14,26 +14,42 @@ public class PlayerScript : MonoBehaviour
     public float minViewX;
     public float rotationX;
 
+    private bool canMove;
+
     public int maxHealth;
     public int currentHealth;
+    public int playerScore;
     Camera camera;
     Rigidbody playerRb;
 
+    public CanvasController canvas;
+    public DeathMenuController deathMenu;
+
+
     private void Awake() {
+
         Cursor.lockState = CursorLockMode.Locked;
 
+        canMove = true;
         camera = Camera.main;
         playerRb = GetComponent<Rigidbody>();
         currentHealth = maxHealth;
+        playerScore = 0;
+
+        Time.timeScale = 1;
+
+        canvas.LifeBar(currentHealth, maxHealth);
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        Movement();
+        if(canMove){
+            Movement();
+            CameraView();
+        }
         
-        CameraView();
 
         if(Input.GetButtonDown("Jump")){
             Jump();
@@ -75,13 +91,24 @@ public class PlayerScript : MonoBehaviour
 
     public void takeDmg(int dmgTaken){
         currentHealth -= dmgTaken;
+        canvas.LifeBar(currentHealth, maxHealth);
         if(currentHealth <= 0){
-            Debug.Log("MUERTO");
+            canMove = false;
+            canvas.gameObject.SetActive(false);
+            deathMenu.gameObject.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 0;
         }
     }
 
     public void addLife(int heal){
         currentHealth = Mathf.Clamp(currentHealth + heal, 0, maxHealth);
+        canvas.LifeBar(currentHealth, maxHealth);
+    }
+
+    public void addPoints(int points){
+        playerScore += points;
+        canvas.UpdateScore(playerScore);
     }
     
 }
